@@ -1,0 +1,54 @@
+{% extends "base_with_logo.html" %}
+{% load static %}
+{% block title %}Ver Archivos - Modificar Estado{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    {% if usuarios %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Correo</th>
+                <th>Programa</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.nombre_completo }}</td>
+                <td>{{ usuario.get_rol_display }}</td>
+                <td><a href="mailto:{{ usuario.email }}">{{ usuario.email }}</a></td>
+                <td>{{ usuario.programa|default:"-" }}</td>
+                <td>{{ usuario.estado }}</td>
+                <td>
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                        {% if usuario.estado == 'activo' %}
+                        <input type="hidden" name="estado" value="inactivo">
+                        <button type="submit" class="btn btn-action"
+                            style="background:#e53935;font-size:12px;padding:6px 12px;">Desactivar</button>
+                        {% else %}
+                        <input type="hidden" name="estado" value="activo">
+                        <button type="submit" class="btn btn-action"
+                            style="background:#43a047;font-size:12px;padding:6px 12px;">Activar</button>
+                        {% endif %}
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center;padding:40px;color:#666;">No hay usuarios registrados.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'gestion_usuarios' %}" class="btn btn-back" id="btn-regresar">Regresar</a>
+{% endblock %}

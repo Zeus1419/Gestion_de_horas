@@ -1,0 +1,52 @@
+{% extends "base_with_logo.html" %}
+{% load static %}
+{% block title %}Cargar Archivos{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <!-- Actividad -->
+    <div class="archivo-row">
+        <div class="archivo-info">
+            <div class="archivo-icon">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" y="3" width="25" height="34" rx="3" fill="none" stroke="#333" stroke-width="2" />
+                    <path d="M10 15h15M10 20h15M10 25h10" stroke="#333" stroke-width="1.5" />
+                    <path d="M28 12l-7-7v5a2 2 0 002 2h5z" fill="none" stroke="#333" stroke-width="1.5" />
+                    <circle cx="30" cy="30" r="8" fill="white" stroke="#333" stroke-width="1.5" />
+                    <path d="M30 26v8M26 30h8" stroke="#333" stroke-width="1.5" />
+                </svg>
+            </div>
+            <span class="archivo-name">Actividad</span>
+        </div>
+        <a href="{% url 'visualizar_actividades_admin' %}" class="archivo-btn" id="btn-ver-actividad">ver</a>
+    </div>
+
+    <!-- Comportamiento de actividad -->
+    <div class="archivo-row">
+        <div class="archivo-info">
+            <div class="archivo-icon">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" y="3" width="25" height="34" rx="3" fill="none" stroke="#333" stroke-width="2" />
+                    <path d="M10 15h15M10 20h15M10 25h10" stroke="#333" stroke-width="1.5" />
+                    <circle cx="30" cy="30" r="8" fill="white" stroke="#333" stroke-width="1.5" />
+                    <path d="M27 30l2 2 4-4" stroke="#333" stroke-width="1.5" fill="none" />
+                </svg>
+            </div>
+            <span class="archivo-name">Comportamiento de<br>actividad</span>
+        </div>
+        <a href="{% url 'visualizar_actividades_admin' %}" class="archivo-btn" id="btn-ver-comportamiento">ver</a>
+    </div>
+
+    <!-- Proyección buttons -->
+    <div class="proyeccion-buttons">
+        <a href="{% url 'proyeccion_admin' tipo='preliminar' %}" class="btn btn-primary" id="btn-preliminar">Realizar
+            proyeccion preliminar</a>
+        <a href="{% url 'proyeccion_admin' tipo='final' %}" class="btn btn-primary" id="btn-final">Realizar proyeccion
+            final</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'admin_dashboard' %}" class="btn btn-back" id="btn-regresar">Regresar</a>
+{% endblock %}

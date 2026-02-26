@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SISTEMA DE REGISTRO - Administrador{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="module-grid">
+        <!-- Cargar archivos -->
+        <a href="{% url 'cargar_archivos' %}" class="module-item" id="mod-cargar">
+            <div class="module-icon">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="45" width="35" height="12" rx="6" fill="none" stroke="#FFD600" stroke-width="3" />
+                    <line x1="27" y1="45" x2="27" y2="15" stroke="#FFD600" stroke-width="3" />
+                    <polyline points="18,25 27,15 36,25" fill="none" stroke="#FFD600" stroke-width="3" />
+                </svg>
+            </div>
+            <span class="module-btn">Cargar archivos</span>
+        </a>
+
+        <!-- Visualizar actividades -->
+        <a href="{% url 'visualizar_actividades_admin' %}" class="module-item" id="mod-visualizar">
+            <div class="module-icon">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="40" cy="40" rx="25" ry="15" fill="none" stroke="#FFD600" stroke-width="3" />
+                    <circle cx="40" cy="40" r="8" fill="none" stroke="#FFD600" stroke-width="3" />
+                    <circle cx="40" cy="40" r="3" fill="#FFD600" />
+                </svg>
+            </div>
+            <span class="module-btn">Visualizar<br>actividades</span>
+        </a>
+
+        <!-- Gestión de usuario -->
+        <a href="{% url 'gestion_usuarios' %}" class="module-item" id="mod-gestion">
+            <div class="module-icon">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="30" cy="25" r="10" fill="#FFD600" />
+                    <path d="M15 55c0-8 7-14 15-14s15 6 15 14" fill="#FFD600" />
+                    <circle cx="55" cy="40" r="6" fill="none" stroke="#FFD600" stroke-width="2.5" />
+                    <line x1="55" y1="34" x2="55" y2="46" stroke="#FFD600" stroke-width="2.5" />
+                    <line x1="49" y1="40" x2="61" y2="40" stroke="#FFD600" stroke-width="2.5" />
+                </svg>
+            </div>
+            <span class="module-btn">Gestión de<br>usuario</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'logout' %}" class="btn btn-cerrar" id="btn-logout">Cerrar Sesion</a>
+{% endblock %}

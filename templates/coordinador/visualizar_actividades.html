@@ -1,0 +1,78 @@
+{% extends "base_with_logo.html" %}
+{% load static %}
+{% block title %}Visualizar Actividades - Coordinador{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2 class="form-subtitle">Seleccione de acuerdo a lo que desea visualizar</h2>
+
+    <form method="GET" id="filter-form">
+        <div class="form-group">
+            <label for="id_anio">Año</label>
+            {{ form.anio }}
+        </div>
+        <div class="form-group">
+            <label for="id_periodo">Periodo</label>
+            {{ form.periodo }}
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="id_semestre">Semestre</label>
+            {{ form.semestre }}
+        </div>
+        <div class="form-group">
+            <label for="id_curso">Curso</label>
+            {{ form.curso }}
+        </div>
+        <div class="form-group">
+            <label for="id_codigo_profesor">Código del Profesor</label>
+            {{ form.codigo_profesor }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="btn-visualizar">Visualizar</button>
+        </div>
+    </form>
+
+    {% if actividades %}
+    <table class="data-table" style="margin-top:30px;">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Horas</th>
+                <th>Fecha</th>
+                <th>Profesor</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for actividad in actividades %}
+            <tr>
+                <td>{{ actividad.nombre }}</td>
+                <td>{{ actividad.get_tipo_actividad_display }}</td>
+                <td>{{ actividad.cantidad_horas }}</td>
+                <td>{{ actividad.fecha }}</td>
+                <td>{{ actividad.profesor.nombre_completo }}</td>
+                <td>{{ actividad.get_estado_display }}</td>
+                <td>
+                    {% if actividad.estado != 'completada' %}
+                    <a href="{% url 'confirmar_tarea' actividad.id %}" class="btn btn-action">Confirmar</a>
+                    {% else %}
+                    <span style="color:green;">✓</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'coordinador_dashboard' %}" class="btn btn-back" id="btn-regresar">Regresar</a>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base_with_logo.html" %}
+{% load static %}
+{% block title %}Visualizar actividades - Docente{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    {% if actividades %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Horas</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Evidencias</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for actividad in actividades %}
+            <tr>
+                <td>{{ actividad.nombre }}</td>
+                <td>{{ actividad.get_tipo_actividad_display }}</td>
+                <td>{{ actividad.cantidad_horas }}</td>
+                <td>{{ actividad.fecha }}</td>
+                <td>{{ actividad.get_estado_display }}</td>
+                <td>{{ actividad.evidencias.count }} archivo(s)</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center;padding:40px;color:#666;font-size:16px;">No tiene actividades asignadas.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'profesor_dashboard' %}" class="btn btn-back" id="btn-regresar">Regresar</a>
+{% endblock %}

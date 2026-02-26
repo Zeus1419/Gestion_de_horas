@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Gestión de Horas{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-user">
+                <div class="header-avatar">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="8" r="4" fill="none" stroke="white" stroke-width="1.5"/>
+                        <path d="M4 20c0-4 4-7 8-7s8 3 8 7" fill="none" stroke="white" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="header-user-info">
+                    {% if user_role_sub %}
+                        <span class="role-name">{{ user_role }}</span>
+                        <span class="sub-role">{{ user_role_sub }}</span>
+                    {% else %}
+                        {% if user_name %}<span class="role-name">{{ user_name }}</span>{% endif %}
+                        <span class="sub-role">{{ user_role }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="header-title">
+                <h1>{{ page_title }}</h1>
+            </div>
+            {% if show_novedades %}
+            <a href="{% url 'novedades' %}" class="header-novedades">
+                Novedades
+            </a>
+            {% endif %}
+            {% if show_logo %}
+            <div class="header-logo">
+                <img src="{% static 'img/logo_white.png' %}" alt="Uniautónoma del Cauca">
+            </div>
+            {% endif %}
+        </header>
+
+        <!-- MESSAGES -->
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <!-- MAIN CONTENT -->
+        <main class="page-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer-bar">
+            {% block footer %}
+            {% endblock %}
+        </footer>
+    </div>
+</body>
+</html>

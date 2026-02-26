@@ -1,0 +1,35 @@
+{% extends "base_with_logo.html" %}
+{% load static %}
+{% block title %}Registro de actividad - Docente{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2 class="form-subtitle">Seleccione de acuerdo a lo que desea registrar</h2>
+
+    <form method="POST" enctype="multipart/form-data" id="actividad-form">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <label class="btn btn-primary" style="cursor:pointer;" id="btn-subir-archivos">
+                Subir archivos
+                <input type="file" name="archivo" style="display:none;" id="id_archivo">
+            </label>
+            <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+            <a href="{% url 'visualizar_actividades_profesor' %}" class="btn btn-primary"
+                id="btn-visualizar">Visualizar</a>
+            <a href="{% url 'novedades' %}" class="btn btn-primary" id="btn-reportar">Reportar Novedad</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'profesor_dashboard' %}" class="btn btn-back" id="btn-regresar">Regresar</a>
+{% endblock %}

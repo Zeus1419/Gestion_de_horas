@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Gestion de Usuarios{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="module-grid">
+        <!-- Registrar Nuevo Usuario -->
+        <a href="{% url 'registro_usuario' %}" class="module-item" id="mod-registrar">
+            <div class="module-icon">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="35" cy="22" r="12" fill="#FFD600" />
+                    <path d="M15 60c0-10 9-17 20-17s20 7 20 17" fill="#FFD600" />
+                    <text x="52" y="45" font-size="24" font-weight="bold" fill="#FFD600">+</text>
+                </svg>
+            </div>
+            <span class="module-btn">Registrar Nuevo<br>Usuario</span>
+        </a>
+
+        <!-- Modificar Estado -->
+        <a href="{% url 'modificar_estado' %}" class="module-item" id="mod-modificar">
+            <div class="module-icon">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="35" cy="22" r="12" fill="#FFD600" />
+                    <path d="M15 60c0-10 9-17 20-17s20 7 20 17" fill="#FFD600" />
+                    <text x="50" y="35" font-size="26" font-weight="bold" fill="#FFD600">?</text>
+                </svg>
+            </div>
+            <span class="module-btn">Modificar<br>Estado</span>
+        </a>
+    </div>
+</div>
+
+<!-- Lista de usuarios registrados -->
+{% if usuarios %}
+<div class="content-card" style="margin-top:30px;">
+    <h2 class="form-subtitle">Usuarios Registrados</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Correo</th>
+                <th>Programa</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.nombre_completo }}</td>
+                <td>{{ usuario.get_rol_display }}</td>
+                <td><a href="mailto:{{ usuario.email }}">{{ usuario.email }}</a></td>
+                <td>{{ usuario.programa|default:"-" }}</td>
+                <td>
+                    {% if usuario.estado == 'activo' %}
+                    <span style="color:#43a047;font-weight:600;">● Activo</span>
+                    {% else %}
+                    <span style="color:#e53935;font-weight:600;">● Inactivo</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'admin_dashboard' %}" class="btn btn-back" id="btn-regresar">Regresar</a>
+{% endblock %}

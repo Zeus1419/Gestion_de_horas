@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SISTEMA DE REGISTRO - Coordinador{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="module-grid">
+        <!-- Visualizar actividades -->
+        <a href="{% url 'visualizar_actividades_coordinador' %}" class="module-item" id="mod-visualizar-coord">
+            <div class="module-icon">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="40" cy="40" rx="25" ry="15" fill="none" stroke="#FFD600" stroke-width="3" />
+                    <circle cx="40" cy="40" r="8" fill="none" stroke="#FFD600" stroke-width="3" />
+                    <circle cx="40" cy="40" r="3" fill="#FFD600" />
+                </svg>
+            </div>
+            <span class="module-btn">Visualizar<br>actividades</span>
+        </a>
+
+        <!-- Actualizar datos de usuario -->
+        <a href="{% url 'actualizar_password' %}" class="module-item" id="mod-actualizar-coord">
+            <div class="module-icon">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="35" cy="22" r="12" fill="#FFD600" />
+                    <path d="M15 60c0-10 9-17 20-17s20 7 20 17" fill="#FFD600" />
+                    <path d="M52 40l6-6M56 38l-4 2 2-4" stroke="#FFD600" stroke-width="2.5" fill="none" />
+                </svg>
+            </div>
+            <span class="module-btn">Actualizar datos<br>de usuario</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="{% url 'logout' %}" class="btn btn-cerrar" id="btn-logout">Cerrar Sesion</a>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novedades</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-logo" style="min-width:280px;padding:0 25px;">
+                <img src="{% static 'img/logo_white.png' %}" alt="Uniautónoma del Cauca" style="max-height:60px;">
+            </div>
+            <div class="header-title">
+                <h1>Novedades</h1>
+            </div>
+        </header>
+
+        <!-- MESSAGES -->
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <!-- MAIN CONTENT -->
+        <main class="page-content">
+            <form method="POST" id="novedad-form">
+                {% csrf_token %}
+                <div class="novedades-card">
+                    <textarea name="mensaje" class="form-textarea" placeholder="Escriba aqui su novedad" rows="6"
+                        id="id_mensaje"
+                        style="background:transparent;width:100%;border:none;font-size:18px;font-weight:700;text-align:center;resize:none;"
+                        required></textarea>
+                </div>
+                <div class="novedades-submit">
+                    <button type="submit" class="btn btn-primary" id="btn-enviar">Enviar Novedad</button>
+                </div>
+            </form>
+        </main>
+
+        <footer class="footer-bar">
+            <a href="javascript:history.back()" class="btn btn-back" id="btn-regresar">Regresar</a>
+        </footer>
+    </div>
+</body>
+
+</html>
