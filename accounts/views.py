@@ -2,7 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import LoginForm, RegistroUsuarioForm, ActualizarPasswordForm
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import LoginForm, RegistroUsuarioForm, ActualizarPasswordForm, PasswordResetRequestForm, SetNewPasswordForm
 from .models import Usuario
 from .decorators import role_required
 
@@ -130,3 +136,93 @@ def modificar_estado(request):
         'usuarios': usuarios,
     }
     return render(request, 'accounts/modificar_estado.html', context)
+
+
+# ========================================
+# VISTAS DE RESTABLECIMIENTO DE CONTRASEÑA
+# ========================================
+
+def password_reset_request(request):
+    """Vista para solicitar restablecimiento de contraseña por email."""
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            try:
+                user = Usuario.objects.get(email__iexact=email)
+            except Usuario.DoesNotExist:
+                user = None
+            
+            if user:
+                # Generar token y UID
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                
+                # Construir enlace de restablecimiento
+                protocol = 'https' if request.is_secure() else 'http'
+                domain = request.get_host()
+                reset_url = f"{protocol}://{domain}/accounts/password-reset/{uid}/{token}/"
+                
+                # Renderizar email
+                email_body = render_to_string('accounts/password_reset_email.html', {
+                    'user': user,
+                    'reset_url': reset_url,
+                    'protocol': protocol,
+                    'domain': domain,
+                })
+                
+                # Enviar email
+                send_mail(
+                    subject='Restablecer Contraseña - Sistema de Gestión de Horas',
+                    message=f'Haga clic en el siguiente enlace para restablecer su contraseña: {reset_url}',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    html_message=email_body,
+                    fail_silently=False,
+                )
+            
+            # Siempre redirigir a "done" para no revelar si el email existe
+            return redirect('password_reset_done')
+    else:
+        form = PasswordResetRequestForm()
+    
+    return render(request, 'accounts/password_reset.html', {'form': form})
+
+
+def password_reset_done(request):
+    """Vista de confirmación de envío del email."""
+    return render(request, 'accounts/password_reset_done.html')
+
+
+def password_reset_confirm(request, uidb64, token):
+    """Vista para confirmar token y establecer nueva contraseña."""
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = Usuario.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Usuario.DoesNotExist):
+        user = None
+    
+    # Validar token
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            form = SetNewPasswordForm(request.POST)
+            if form.is_valid():
+                user.set_password(form.cleaned_data['nueva_password'])
+                user.save()
+                return redirect('password_reset_complete')
+        else:
+            form = SetNewPasswordForm()
+        
+        return render(request, 'accounts/password_reset_confirm.html', {
+            'form': form,
+            'validlink': True,
+        })
+    else:
+        return render(request, 'accounts/password_reset_confirm.html', {
+            'validlink': False,
+        })
+
+
+def password_reset_complete(request):
+    """Vista de confirmación final de contraseña restablecida."""
+    return render(request, 'accounts/password_reset_complete.html')

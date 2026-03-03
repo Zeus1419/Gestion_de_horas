@@ -5,10 +5,11 @@ from .models import Usuario
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
-        widget=forms.TextInput(attrs={
+        widget=forms.EmailInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Ingrese su usuario',
-        })
+            'placeholder': 'Ingrese su correo electrónico',
+        }),
+        label='Correo Electrónico'
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
@@ -65,6 +66,43 @@ class ActualizarPasswordForm(forms.Form):
         label='Confirmar Nueva Contraseña'
     )
     
+    def clean(self):
+        cleaned_data = super().clean()
+        nueva = cleaned_data.get('nueva_password')
+        confirmar = cleaned_data.get('confirmar_password')
+        if nueva and confirmar and nueva != confirmar:
+            raise forms.ValidationError('Las contraseñas no coinciden.')
+        return cleaned_data
+
+
+class PasswordResetRequestForm(forms.Form):
+    """Formulario para solicitar restablecimiento de contraseña."""
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Ingrese su correo electrónico',
+        }),
+        label='Correo Electrónico'
+    )
+
+
+class SetNewPasswordForm(forms.Form):
+    """Formulario para establecer la nueva contraseña."""
+    nueva_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Ingrese su nueva contraseña',
+        }),
+        label='Nueva Contraseña'
+    )
+    confirmar_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Confirme su nueva contraseña',
+        }),
+        label='Confirmar Contraseña'
+    )
+
     def clean(self):
         cleaned_data = super().clean()
         nueva = cleaned_data.get('nueva_password')

@@ -9,13 +9,16 @@
 /* ========================================
    CSS RESET & BASE
    ======================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     font-family: 'Inter', sans-serif;
     background-color: #f5f5f5;
@@ -65,7 +68,7 @@ a {
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.7);
+    border: 2px solid rgba(255, 255, 255, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -195,7 +198,7 @@ a {
     color: white;
     padding: 10px 24px;
     font-size: 13px;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-action:hover {
@@ -263,7 +266,7 @@ a {
     font-size: 13px;
     font-weight: 500;
     text-align: center;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     min-width: 120px;
 }
 
@@ -301,7 +304,7 @@ a {
     background: white;
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     margin: 0 auto;
 }
@@ -354,7 +357,7 @@ a {
     padding: 14px 20px;
     border: none;
     border-radius: 25px;
-    background-color: rgba(255,255,255,0.15);
+    background-color: rgba(255, 255, 255, 0.15);
     color: white;
     font-size: 14px;
     margin-bottom: 15px;
@@ -362,11 +365,11 @@ a {
 }
 
 .login-form .form-input::placeholder {
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .login-form .form-input:focus {
-    background-color: rgba(255,255,255,0.25);
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 .remember-row {
@@ -389,11 +392,11 @@ a {
     margin: 0 auto;
     padding: 14px;
     border-radius: 25px;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     color: white;
     font-size: 16px;
     font-weight: 800;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
     text-align: center;
     letter-spacing: 1px;
@@ -401,14 +404,14 @@ a {
 }
 
 .btn-login:hover {
-    background-color: rgba(255,255,255,0.35);
+    background-color: rgba(255, 255, 255, 0.35);
 }
 
 .forgot-link {
     text-align: center;
     margin-top: 15px;
     font-size: 14px;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .forgot-link:hover {
@@ -445,7 +448,7 @@ a {
 
 .form-input:focus {
     border-color: #2196F3;
-    box-shadow: 0 0 0 2px rgba(33,150,243,0.15);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.15);
 }
 
 .form-textarea {
@@ -633,41 +636,61 @@ a {
     .login-wrapper {
         flex-direction: column;
     }
-    
+
     .header {
         flex-wrap: wrap;
         height: auto;
     }
-    
+
     .header-user {
         min-width: 100%;
         padding: 15px 20px;
     }
-    
+
     .header-title {
         padding: 10px 20px;
     }
-    
+
     .module-grid {
         flex-direction: column;
         gap: 30px;
     }
-    
+
     .form-group {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
     }
-    
+
     .form-group label {
         min-width: auto;
     }
-    
+
     .page-content {
         padding: 20px;
     }
-    
+
     .content-card {
         padding: 25px 20px;
+    }
+}
+
+/* ========================================
+   PASSWORD RESET PAGES
+   ======================================== */
+.reset-status-icon {
+    margin-bottom: 20px;
+    animation: fadeInDown 0.5s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
