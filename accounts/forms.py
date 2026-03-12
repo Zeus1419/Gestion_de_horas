@@ -26,7 +26,7 @@ class RegistroUsuarioForm(forms.ModelForm):
         }),
         label='Contraseña'
     )
-    
+
     class Meta:
         model = Usuario
         fields = ['first_name', 'email', 'password', 'programa', 'rol']
@@ -42,7 +42,16 @@ class RegistroUsuarioForm(forms.ModelForm):
             'programa': forms.TextInput(attrs={'class': 'form-input'}),
             'rol': forms.Select(attrs={'class': 'form-input'}),
         }
-    
+
+    def clean_email(self):
+        """Valida que el email no esté registrado."""
+        email = self.cleaned_data.get('email')
+        if email:
+            # Verificar si ya existe un usuario con este email
+            if Usuario.objects.filter(email__iexact=email).exists():
+                raise forms.ValidationError('Este correo electrónico ya está registrado.')
+        return email
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = user.email.split('@')[0] if user.email else user.first_name.lower()

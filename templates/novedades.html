@@ -1,55 +1,51 @@
+{% extends "base_sidebar.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
+{% block title %}Novedades{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novedades</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-
-<body>
-    <div class="page-wrapper">
-        <!-- HEADER -->
-        <header class="header">
-            <div class="header-logo" style="min-width:280px;padding:0 25px;">
-                <img src="{% static 'img/logo_white.png' %}" alt="Uniautónoma del Cauca" style="max-height:60px;">
-            </div>
-            <div class="header-title">
-                <h1>Novedades</h1>
-            </div>
-        </header>
-
-        <!-- MESSAGES -->
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
-        <!-- MAIN CONTENT -->
-        <main class="page-content">
-            <form method="POST" id="novedad-form">
-                {% csrf_token %}
-                <div class="novedades-card">
-                    <textarea name="mensaje" class="form-textarea" placeholder="Escriba aqui su novedad" rows="6"
-                        id="id_mensaje"
-                        style="background:transparent;width:100%;border:none;font-size:18px;font-weight:700;text-align:center;resize:none;"
-                        required></textarea>
-                </div>
-                <div class="novedades-submit">
-                    <button type="submit" class="btn btn-primary" id="btn-enviar">Enviar Novedad</button>
-                </div>
-            </form>
-        </main>
-
-        <footer class="footer-bar">
-            <a href="javascript:history.back()" class="btn btn-back" id="btn-regresar">Regresar</a>
-        </footer>
+{% block sidebar_menu %}
+<!-- Dashboard -->
+<a href="{% if user.rol == 'administrador' %}{% url 'admin_dashboard' %}{% elif user.rol == 'coordinador' %}{% url 'coordinador_dashboard' %}{% else %}{% url 'profesor_dashboard' %}{% endif %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
     </div>
-</body>
+    <span class="sidebar-menu-text">Dashboard</span>
+</a>
 
-</html>
+<!-- Novedades -->
+<a href="{% url 'novedades' %}" class="sidebar-menu-item active">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Novedades</span>
+</a>
+{% endblock %}
+
+{% block header_title %}Novedades{% endblock %}
+
+{% block show_novedades %}{% endblock %}
+
+{% block content %}
+<form method="POST" id="novedad-form">
+    {% csrf_token %}
+    <div class="novedades-card">
+        <textarea name="mensaje" class="form-textarea" placeholder="Escriba aqui su novedad" rows="6"
+            id="id_mensaje"
+            style="background:transparent;width:100%;border:none;font-size:18px;font-weight:700;text-align:center;resize:none;"
+            required></textarea>
+    </div>
+    <div class="novedades-submit">
+        <button type="submit" class="btn btn-primary" id="btn-enviar">Enviar Novedad</button>
+    </div>
+</form>
+{% endblock %}

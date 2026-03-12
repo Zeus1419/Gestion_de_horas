@@ -55,7 +55,13 @@ class Actividad(models.Model):
 
 class Evidencia(models.Model):
     """Model for evidence files uploaded by professors."""
-    
+
+    ESTADOS = (
+        ('pendiente', 'Por Revisar'),
+        ('aprobada', 'Aprobada'),
+        ('rechazada', 'Rechazada'),
+    )
+
     actividad = models.ForeignKey(
         Actividad,
         on_delete=models.CASCADE,
@@ -69,14 +75,22 @@ class Evidencia(models.Model):
         on_delete=models.CASCADE,
         related_name='evidencias_subidas'
     )
-    
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
+    revisado_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='evidencias_revisadas'
+    )
+    fecha_revision = models.DateTimeField(null=True, blank=True)
+
     class Meta:
         verbose_name = 'Evidencia'
         verbose_name_plural = 'Evidencias'
-    
+
     def __str__(self):
         return f"Evidencia: {self.nombre_archivo or self.archivo.name}"
-    
+
     def save(self, *args, **kwargs):
         if not self.nombre_archivo and self.archivo:
             self.nombre_archivo = self.archivo.name

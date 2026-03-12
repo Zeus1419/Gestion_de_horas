@@ -1,6 +1,68 @@
-{% extends "base_with_logo.html" %}
+{% extends "base_sidebar.html" %}
 {% load static %}
 {% block title %}Registro de actividad - Docente{% endblock %}
+
+{% block sidebar_menu %}
+<!-- Dashboard -->
+<a href="{% url 'profesor_dashboard' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Dashboard</span>
+</a>
+
+<!-- Nueva Actividad -->
+<a href="{% url 'nueva_actividad' %}" class="sidebar-menu-item active">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Nueva Actividad</span>
+</a>
+
+<!-- Visualizar Actividades -->
+<a href="{% url 'visualizar_actividades_profesor' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Ver Actividades</span>
+</a>
+
+<!-- Actualizar Contraseña -->
+<a href="{% url 'actualizar_password' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Cambiar Contraseña</span>
+</a>
+
+<!-- Novedades -->
+<a href="{% url 'novedades' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Novedades</span>
+</a>
+{% endblock %}
 
 {% block content %}
 <div class="content-card">
@@ -16,20 +78,124 @@
         </div>
         {% endfor %}
 
+        <!-- Campo de carga de archivos -->
+        <div class="form-group">
+            <label for="id_archivo">Archivos de evidencia (opcional):</label>
+            <div class="file-upload-wrapper">
+                <label class="file-upload-label" for="id_archivo">
+                    <svg class="upload-icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20V13H6V20H18M13,9V3.5L18.5,9H13Z" />
+                    </svg>
+                    <span id="file-label">Seleccionar archivo</span>
+                    <input type="file" name="archivo" style="display:none;" id="id_archivo" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+                </label>
+                <div id="file-preview" class="file-preview"></div>
+            </div>
+            <small class="help-text">Formatos aceptados: PDF, DOC, DOCX, XLS, XLSX, JPG, JPEG, PNG</small>
+        </div>
+
         <div class="form-actions">
-            <label class="btn btn-primary" style="cursor:pointer;" id="btn-subir-archivos">
-                Subir archivos
-                <input type="file" name="archivo" style="display:none;" id="id_archivo">
-            </label>
-            <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+            <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar Actividad</button>
             <a href="{% url 'visualizar_actividades_profesor' %}" class="btn btn-primary"
                 id="btn-visualizar">Visualizar</a>
             <a href="{% url 'novedades' %}" class="btn btn-primary" id="btn-reportar">Reportar Novedad</a>
         </div>
     </form>
 </div>
-{% endblock %}
 
-{% block footer %}
-<a href="{% url 'profesor_dashboard' %}" class="btn btn-back" id="btn-regresar">Regresar</a>
+<style>
+    .file-upload-wrapper {
+        margin-top: 8px;
+    }
+    .file-upload-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: #f5f5f5;
+        border: 2px dashed #ccc;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .file-upload-label:hover {
+        background: #e8e8e8;
+        border-color: #007bff;
+    }
+    .upload-icon {
+        color: #007bff;
+    }
+    #file-label {
+        font-weight: 500;
+        color: #333;
+    }
+    .file-preview {
+        margin-top: 10px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        display: none;
+    }
+    .file-preview.show {
+        display: block;
+    }
+    .file-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 6px;
+    }
+    .file-item:last-child {
+        margin-bottom: 0;
+    }
+    .file-icon {
+        color: #28a745;
+    }
+    .file-name {
+        flex: 1;
+        font-size: 14px;
+        color: #333;
+        word-break: break-all;
+    }
+    .help-text {
+        display: block;
+        margin-top: 6px;
+        color: #666;
+        font-size: 12px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('id_archivo');
+        const fileLabel = document.getElementById('file-label');
+        const filePreview = document.getElementById('file-preview');
+        
+        fileInput.addEventListener('change', function() {
+            const files = this.files;
+            if (files && files.length > 0) {
+                fileLabel.textContent = files.length === 1 ? 'Cambiar archivo' : 'Cambiar archivos';
+                filePreview.innerHTML = '';
+                filePreview.classList.add('show');
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <svg class="file-icon" viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20V13H6V20H18M13,9V3.5L18.5,9H13Z" />
+                        </svg>
+                        <span class="file-name">${file.name}</span>
+                    `;
+                    filePreview.appendChild(fileItem);
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

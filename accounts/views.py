@@ -65,9 +65,14 @@ def registro_usuario(request):
             form.save()
             messages.success(request, 'Usuario registrado exitosamente.')
             return redirect('gestion_usuarios')
+        else:
+            # Mostrar errores de validación
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = RegistroUsuarioForm()
-    
+
     context = {
         'form': form,
         'page_title': 'Registro de Usuario',
@@ -106,7 +111,7 @@ def gestion_usuarios(request):
     usuarios = Usuario.objects.all().order_by('first_name')
     context = {
         'page_title': 'Gestion de Usuarios',
-        'user_role': request.user.rol_display,
+        'user_role': 'Administrador',
         'user_name': request.user.nombre_completo,
         'usuarios': usuarios,
     }
@@ -118,7 +123,7 @@ def gestion_usuarios(request):
 def modificar_estado(request):
     """Vista para modificar el usuario."""
     usuarios = Usuario.objects.all()
-    
+
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
         nuevo_estado = request.POST.get('estado')
@@ -128,10 +133,10 @@ def modificar_estado(request):
             usuario.save()
             messages.success(request, f'Estado de {usuario.nombre_completo} actualizado.')
             return redirect('modificar_estado')
-    
+
     context = {
         'page_title': 'Ver Archivos',
-        'user_role': request.user.rol_display,
+        'user_role': 'Administrador',
         'user_name': request.user.nombre_completo,
         'usuarios': usuarios,
     }

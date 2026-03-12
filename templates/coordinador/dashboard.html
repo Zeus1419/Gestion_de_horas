@@ -1,9 +1,77 @@
-{% extends "base.html" %}
+{% extends "base_sidebar.html" %}
 {% load static %}
-{% block title %}SISTEMA DE REGISTRO - Coordinador{% endblock %}
+{% block title %}Dashboard - Coordinador{% endblock %}
+
+{% block sidebar_menu %}
+<!-- Dashboard -->
+<a href="{% url 'coordinador_dashboard' %}" class="sidebar-menu-item active">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Dashboard</span>
+</a>
+
+<!-- Visualizar Actividades -->
+<a href="{% url 'visualizar_actividades_coordinador' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Ver Actividades</span>
+</a>
+
+<!-- Progreso Docentes -->
+<a href="{% url 'progreso_docentes_coordinador' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Progreso Docentes</span>
+</a>
+
+<!-- Actualizar Contraseña -->
+<a href="{% url 'actualizar_password' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Cambiar Contraseña</span>
+</a>
+
+<!-- Novedades -->
+<a href="{% url 'novedades' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Novedades</span>
+</a>
+{% endblock %}
+
+{% block header_title %}SISTEMA DE REGISTRO{% endblock %}
 
 {% block content %}
 <div class="content-card">
+    <h2 class="dashboard-welcome">Bienvenido, {{ user_name }}</h2>
+    <p class="dashboard-subtitle">Seleccione una opción del menú lateral o use los accesos rápidos:</p>
+    
     <div class="module-grid">
         <!-- Visualizar actividades -->
         <a href="{% url 'visualizar_actividades_coordinador' %}" class="module-item" id="mod-visualizar-coord">
@@ -30,8 +98,16 @@
         </a>
     </div>
 </div>
-{% endblock %}
 
-{% block footer %}
-<a href="{% url 'logout' %}" class="btn btn-cerrar" id="btn-logout">Cerrar Sesion</a>
+<style>
+    .dashboard-welcome {
+        font-size: 28px;
+        color: #1a1a2e;
+        margin-bottom: 8px;
+    }
+    .dashboard-subtitle {
+        color: #666;
+        margin-bottom: 30px;
+    }
+</style>
 {% endblock %}

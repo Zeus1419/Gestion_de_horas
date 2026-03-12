@@ -1,0 +1,381 @@
+{% extends "base_sidebar.html" %}
+{% load static %}
+{% block title %}Mi Progreso{% endblock %}
+
+{% block sidebar_menu %}
+<!-- Dashboard -->
+<a href="{% url 'profesor_dashboard' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Dashboard</span>
+</a>
+
+<!-- Nueva Actividad -->
+<a href="{% url 'nueva_actividad' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Nueva Actividad</span>
+</a>
+
+<!-- Visualizar Actividades -->
+<a href="{% url 'visualizar_actividades_profesor' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Ver Actividades</span>
+</a>
+
+<!-- Mi Progreso -->
+<a href="{% url 'progreso_profesor' %}" class="sidebar-menu-item active">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Mi Progreso</span>
+</a>
+
+<!-- Actualizar Contraseña -->
+<a href="{% url 'actualizar_password' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Cambiar Contraseña</span>
+</a>
+
+<!-- Novedades -->
+<a href="{% url 'novedades' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Novedades</span>
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2 class="form-subtitle">Mi Progreso Personal</h2>
+    
+    <!-- Resumen General -->
+    <div class="progreso-resumen">
+        <div class="resumen-header">
+            <h3>Resumen de Progreso</h3>
+            <p>Actividades completadas: {{ actividades_completadas }} de {{ total_actividades }}</p>
+        </div>
+        
+        <div class="progreso-principal">
+            <div class="circulo-progreso">
+                <svg viewBox="0 0 120 120" width="120" height="120">
+                    <circle class="circulo-fondo" cx="60" cy="60" r="52"/>
+                    <circle class="circulo-progreso-barra" cx="60" cy="60" r="52" 
+                            stroke-dasharray="{{ circunferencia }}" 
+                            stroke-dashoffset="{{ offset }}"/>
+                    <text x="60" y="65" text-anchor="middle" class="circulo-porcentaje">{{ progreso }}%</text>
+                </svg>
+            </div>
+            
+            <div class="resumen-stats">
+                <div class="stat-box">
+                    <span class="stat-numero">{{ total_actividades }}</span>
+                    <span class="stat-texto">Total Actividades</span>
+                </div>
+                <div class="stat-box completadas">
+                    <span class="stat-numero">{{ actividades_completadas }}</span>
+                    <span class="stat-texto">Completadas</span>
+                </div>
+                <div class="stat-box faltantes">
+                    <span class="stat-numero">{{ faltantes }}</span>
+                    <span class="stat-texto">Faltantes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Lista de Actividades -->
+    {% if actividades %}
+    <h3 class="section-title">Detalle de Actividades</h3>
+    <div class="actividades-list">
+        {% for actividad in actividades %}
+        <div class="actividad-item {% if actividad.estado == 'completada' %}completada{% endif %}">
+            <div class="actividad-info">
+                <h4 class="actividad-nombre">{{ actividad.nombre }}</h4>
+                <p class="actividad-meta">
+                    <span class="meta-tipo">{{ actividad.get_tipo_actividad_display }}</span>
+                    <span class="meta-horas">{{ actividad.cantidad_horas }} horas</span>
+                    <span class="meta-fecha">{{ actividad.fecha }}</span>
+                </p>
+            </div>
+            
+            <div class="actividad-estado">
+                <span class="badge badge-{{ actividad.estado }}">
+                    {{ actividad.get_estado_display }}
+                </span>
+                {% if actividad.evidencias_count > 0 %}
+                <span class="evidencias-badge" title="{{ actividad.evidencias_count }} evidencia(s)">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20V13H6V20H18M13,9V3.5L18.5,9H13Z" />
+                    </svg>
+                    {{ actividad.evidencias_count }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="text-align:center;padding:40px;color:#666;font-size:16px;">No tienes actividades registradas.</p>
+    {% endif %}
+</div>
+
+<style>
+    .progreso-resumen {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 30px;
+        color: white;
+    }
+    
+    .resumen-header h3 {
+        margin: 0 0 10px 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+    .resumen-header p {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 14px;
+    }
+    
+    .progreso-principal {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-top: 20px;
+    }
+    
+    .circulo-progreso {
+        flex-shrink: 0;
+    }
+    
+    .circulo-fondo {
+        fill: none;
+        stroke: rgba(255,255,255,0.2);
+        stroke-width: 12;
+    }
+    
+    .circulo-progreso-barra {
+        fill: none;
+        stroke: #FFD600;
+        stroke-width: 12;
+        stroke-linecap: round;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        transition: stroke-dashoffset 0.5s ease;
+    }
+    
+    .circulo-porcentaje {
+        fill: #FFD600;
+        font-size: 24px;
+        font-weight: 700;
+    }
+    
+    .resumen-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        flex: 1;
+    }
+    
+    .stat-box {
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .stat-numero {
+        display: block;
+        font-size: 28px;
+        font-weight: 700;
+        color: #FFD600;
+    }
+    
+    .stat-texto {
+        display: block;
+        font-size: 12px;
+        color: rgba(255,255,255,0.8);
+        margin-top: 5px;
+        text-transform: uppercase;
+    }
+    
+    .stat-box.completadas .stat-numero {
+        color: #4ade80;
+    }
+    
+    .stat-box.faltantes .stat-numero {
+        color: #f87171;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .actividades-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .actividad-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        border-left: 4px solid #e0e0e0;
+        transition: all 0.2s ease;
+    }
+    
+    .actividad-item:hover {
+        background: #f0f0f0;
+        transform: translateX(5px);
+    }
+    
+    .actividad-item.completada {
+        border-left-color: #28a745;
+        background: #f0fff4;
+    }
+    
+    .actividad-nombre {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 0 0 8px 0;
+    }
+    
+    .actividad-meta {
+        display: flex;
+        gap: 15px;
+        margin: 0;
+        font-size: 13px;
+        color: #666;
+    }
+    
+    .meta-tipo {
+        background: #e0e0e0;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+    }
+    
+    .meta-horas {
+        color: #007bff;
+        font-weight: 500;
+    }
+    
+    .meta-fecha {
+        color: #999;
+    }
+    
+    .actividad-estado {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+    }
+    
+    .badge-pendiente {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .badge-en_progreso {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+    
+    .badge-completada {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .badge-rechazada {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    .evidencias-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: #007bff;
+        color: white;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+    }
+    
+    @media (max-width: 768px) {
+        .progreso-principal {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .resumen-stats {
+            width: 100%;
+        }
+        
+        .actividad-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .actividad-estado {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+</style>
+{% endblock %}

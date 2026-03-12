@@ -1,0 +1,285 @@
+{% extends "base_sidebar.html" %}
+{% load static %}
+{% block title %}Progreso de Docentes{% endblock %}
+
+{% block sidebar_menu %}
+<!-- Dashboard -->
+<a href="{% url 'admin_dashboard' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Dashboard</span>
+</a>
+
+<!-- Cargar Archivos -->
+<a href="{% url 'cargar_archivos' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Cargar Archivos</span>
+</a>
+
+<!-- Visualizar Actividades -->
+<a href="{% url 'visualizar_actividades_admin' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Ver Actividades</span>
+</a>
+
+<!-- Progreso Docentes -->
+<a href="{% url 'progreso_docentes_admin' %}" class="sidebar-menu-item active">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Progreso Docentes</span>
+</a>
+
+<!-- Asignar Actividad -->
+<a href="{% url 'asignar_actividad' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="8.5" cy="7" r="4"/>
+            <line x1="20" y1="8" x2="20" y2="14"/>
+            <line x1="23" y1="11" x2="17" y2="11"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Asignar Actividad</span>
+</a>
+
+<!-- Gestión de Usuarios -->
+<a href="{% url 'gestion_usuarios' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Gestión Usuarios</span>
+</a>
+
+<!-- Modificar Estado -->
+<a href="{% url 'modificar_estado' %}" class="sidebar-menu-item">
+    <div class="sidebar-menu-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+    </div>
+    <span class="sidebar-menu-text">Modificar Estado</span>
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2 class="form-subtitle">Progreso de Docentes</h2>
+    
+    {% if profesores %}
+    <div class="progreso-grid">
+        {% for profesor in profesores %}
+        <div class="progreso-card">
+            <div class="progreso-header">
+                <div class="progreso-avatar">
+                    <svg viewBox="0 0 24 24" width="40" height="40">
+                        <circle cx="12" cy="8" r="4" fill="none" stroke="#FFD600" stroke-width="1.5"/>
+                        <path d="M4 20c0-4 4-7 8-7s8 3 8 7" fill="none" stroke="#FFD600" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="progreso-info">
+                    <h3 class="progreso-nombre">{{ profesor.nombre_completo }}</h3>
+                    <p class="progreso-email">{{ profesor.email }}</p>
+                </div>
+            </div>
+            
+            <div class="progreso-body">
+                <div class="progreso-bar-container">
+                    <div class="progreso-bar" style="width: {{ profesor.progreso }}%;">
+                        <span class="progreso-porcentaje">{{ profesor.progreso }}%</span>
+                    </div>
+                </div>
+                
+                <div class="progreso-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">{{ profesor.total_actividades }}</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-item completadas">
+                        <span class="stat-value">{{ profesor.actividades_completadas }}</span>
+                        <span class="stat-label">Completadas</span>
+                    </div>
+                    <div class="stat-item pendientes">
+                        <span class="stat-value">{{ profesor.actividades_pendientes }}</span>
+                        <span class="stat-label">Pendientes</span>
+                    </div>
+                    <div class="stat-item progreso">
+                        <span class="stat-value">{{ profesor.actividades_en_progreso }}</span>
+                        <span class="stat-label">En Progreso</span>
+                    </div>
+                    <div class="stat-item evidencias">
+                        <span class="stat-value">{{ profesor.total_evidencias }}</span>
+                        <span class="stat-label">Evidencias</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="text-align:center;padding:40px;color:#666;font-size:16px;">No hay docentes registrados.</p>
+    {% endif %}
+</div>
+
+<style>
+    .progreso-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .progreso-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .progreso-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .progreso-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .progreso-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .progreso-nombre {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+    }
+    
+    .progreso-email {
+        font-size: 13px;
+        color: #666;
+        margin: 0;
+    }
+    
+    .progreso-body {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .progreso-bar-container {
+        width: 100%;
+        height: 24px;
+        background: #e0e0e0;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .progreso-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10px;
+        transition: width 0.5s ease;
+        min-width: 40px;
+    }
+    
+    .progreso-porcentaje {
+        color: white;
+        font-weight: 700;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    
+    .progreso-stats {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        padding-top: 10px;
+    }
+    
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a1a2e;
+    }
+    
+    .stat-label {
+        font-size: 10px;
+        color: #666;
+        margin-top: 4px;
+        text-transform: uppercase;
+    }
+    
+    .stat-item.completadas .stat-value {
+        color: #28a745;
+    }
+    
+    .stat-item.pendientes .stat-value {
+        color: #ffc107;
+    }
+    
+    .stat-item.progreso .stat-value {
+        color: #17a2b8;
+    }
+    
+    .stat-item.evidencias .stat-value {
+        color: #007bff;
+    }
+</style>
+{% endblock %}
